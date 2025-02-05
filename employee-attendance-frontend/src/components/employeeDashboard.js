@@ -6,10 +6,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader"; // Spinner component
 import { Table, Button, message } from "antd"; // Ant Design components
 import "../styles/dashboard.css"; // Import the CSS file
+import LeaveRequestModal from "./LeaveRequestModal";
+import { useQuery } from "@tanstack/react-query";
 
 function EmployeeDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [attendance, setAttendance] = useState([]); // State to store attendance logs
   const [loading, setLoading] = useState({
     checkIn: false,
@@ -22,6 +25,16 @@ function EmployeeDashboard() {
   const token = localStorage.getItem("token"); // Retrieve the JWT token from localStorage
 
   const notify = (message) => toast.success(message); // Success notification function
+
+  const { data: leaveRequests, refetch } = useQuery({
+    queryKey: ["leaveRequests"],
+    queryFn: async () => {
+      const { data } = await axios.get(`http://localhost:5000/api/leave/${username}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return data;
+    },
+  });
 
   const handleCheckIn = async () => {
     setLoading((prev) => ({ ...prev, checkIn: true })); // Start loading
@@ -37,9 +50,7 @@ function EmployeeDashboard() {
       );
       notify(response.data.message); // Use toast for notification
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "Check-in failed. Please try again.";
-      toast.error(errorMessage); // Use toast for error notification
+      toast.error(error.response?.data?.error || "Check-in failed. Please try again.");
     } finally {
       setLoading((prev) => ({ ...prev, checkIn: false })); // Stop loading
     }
@@ -57,11 +68,9 @@ function EmployeeDashboard() {
           },
         }
       );
-      notify(response.data.message); // Use toast for notification
+      notify(response.data.message);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "Check-out failed. Please try again.";
-      toast.error(errorMessage); // Use toast for error notification
+      toast.error(error.response?.data?.error || "Check-out failed. Please try again.");
     } finally {
       setLoading((prev) => ({ ...prev, checkOut: false })); // Stop loading
     }
@@ -70,32 +79,22 @@ function EmployeeDashboard() {
   const handleViewAttendance = async () => {
     setLoading((prev) => ({ ...prev, viewAttendance: true })); // Start loading
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/attendance/user-logs",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token for authentication
-          },
-        }
-      );
+      const response = await axios.get("http://localhost:5000/api/attendance/user-logs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      // Format the fetched attendance logs
       const formattedAttendance = response.data.map((record) => ({
         ...record,
-        login_time: record.login_time
-          ? new Date(record.login_time).toLocaleString() // Parse and format login time
-          : "No Login Time", // Fallback for missing login time
-        logout_time: record.logout_time
-          ? new Date(record.logout_time).toLocaleString() // Parse and format logout time
-          : "Still Checked In", // Fallback for missing logout time
+        login_time: record.login_time ? new Date(record.login_time).toLocaleString() : "No Login Time",
+        logout_time: record.logout_time ? new Date(record.logout_time).toLocaleString() : "Still Checked In",
       }));
 
-      setAttendance(formattedAttendance); // Update attendance state
-      setShowTable(true); // Show the table after fetching data
+      setAttendance(formattedAttendance);
+      setShowTable(true);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "Failed to fetch attendance logs.";
-      toast.error(errorMessage); // Show error notification
+      toast.error(error.response?.data?.error || "Failed to fetch attendance logs.");
     } finally {
       setLoading((prev) => ({ ...prev, viewAttendance: false })); // Stop loading
     }
@@ -106,21 +105,9 @@ function EmployeeDashboard() {
     navigate("/");
   };
 
-  // Table columns definition
   const columns = [
-    {
-      title: "Login Time",
-      dataIndex: "login_time",
-      key: "login_time",
-      sorter: (a, b) => new Date(a.login_time) - new Date(b.login_time),
-    },
-    {
-      title: "Logout Time",
-      dataIndex: "logout_time",
-      key: "logout_time",
-      sorter: (a, b) => new Date(a.logout_time) - new Date(b.logout_time),
-      render: (text) => (text ? text : "Still Checked In"),
-    },
+    { title: "Login Time", dataIndex: "login_time", key: "login_time" },
+    { title: "Logout Time", dataIndex: "logout_time", key: "logout_time" },
   ];
 
   return (
@@ -128,33 +115,16 @@ function EmployeeDashboard() {
       <nav className="navbar">
         <h2>Welcome, {username}</h2>
         <div className="nav-buttons">
-          <Button
-            onClick={handleCheckIn}
-            loading={loading.checkIn}
-            type="primary"
-          >
+          <Button onClick={handleCheckIn} loading={loading.checkIn} type="primary">
             Check-In
           </Button>
-          <Button
-            onClick={handleCheckOut}
-            loading={loading.checkOut}
-            type="primary"
-            danger
-          >
+          <Button onClick={handleCheckOut} loading={loading.checkOut} type="primary" danger>
             Check-Out
           </Button>
-          <Button
-            onClick={handleViewAttendance}
-            loading={loading.viewAttendance}
-          >
+          <Button onClick={handleViewAttendance} loading={loading.viewAttendance}>
             View Attendance
           </Button>
-          <Button onClick={() => alert("Request Leave clicked")}>
-            Request Leave
-          </Button>
-          <Button onClick={() => alert("View Notifications clicked")}>
-            View Notifications
-          </Button>
+          <Button onClick={() => setIsModalOpen(true)}>Request Leave</Button>
           <Button onClick={handleLogout} type="primary" danger>
             Logout
           </Button>
@@ -164,22 +134,22 @@ function EmployeeDashboard() {
       <div className="attendance-container">
         <h2>Attendance Records</h2>
         {showTable ? (
-          <Table
-            columns={columns}
-            dataSource={attendance}
-            rowKey="id"
-            pagination={{ pageSize: 10 }}
-            className="attendance-table"
-          />
+          <Table columns={columns} dataSource={attendance} rowKey="id" pagination={{ pageSize: 10 }} />
         ) : (
-          <p>No attendance records to display. Click "View Attendance" to load your data.</p>
+          <p>No attendance records to display.</p>
         )}
       </div>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
+      <LeaveRequestModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} refetch={refetch} username={username} />
+
+      <h2 className="mt-4">My Leave Requests</h2>
+      <Table
+        columns={[{ title: "Start Date", dataIndex: "start_date" }, { title: "End Date", dataIndex: "end_date" }, { title: "Status", dataIndex: "status" }]}
+        dataSource={leaveRequests}
+        rowKey="id"
+        pagination={{ pageSize: 5 }}
       />
     </div>
   );

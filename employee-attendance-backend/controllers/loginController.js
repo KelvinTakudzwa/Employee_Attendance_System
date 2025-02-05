@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 
 // Controller for handling login
 const handleLogin = async (req, res) => {
-  console.log("Login request received:", req.body); // Debugging
+  console.log("Login request received:", req.body);
+  // return res.json({ message: "Login request received" });
 
   const { username, password } = req.body;
 
