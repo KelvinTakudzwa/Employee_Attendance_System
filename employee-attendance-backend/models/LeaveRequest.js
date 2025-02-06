@@ -42,14 +42,22 @@ const getLeaveRequestsByUsername = async (username) => {
 // Update leave request status
 const updateLeaveStatus = async (username, status) => {
   try {
-    const sql = "UPDATE leave_requests SET status = ? WHERE username = ?";
+    const sql = `
+      UPDATE leave_requests 
+      SET status = ? 
+      WHERE username = ? AND status = 'Pending' 
+      ORDER BY created_at DESC 
+      LIMIT 1
+    `;
     const [result] = await db.query(sql, [status, username]);
+    console.log("Update Result:", result);
     return result;
   } catch (error) {
     console.error("Error updating leave status:", error);
     throw error;
   }
 };
+
 
 module.exports = {
   createLeaveRequest,

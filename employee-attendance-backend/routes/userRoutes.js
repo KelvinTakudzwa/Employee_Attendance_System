@@ -4,7 +4,7 @@ const { addUserController, updateUserController } = require('../controllers/user
 // const { updateUserController } = require('../models/userModel');
 
 // Route to add a new user
-router.post('/', addUserController);
-router.put('/', updateUserController);
+router.post('/add', addUserController);
+router.put('/update', updateUserController);
 
 module.exports = router;

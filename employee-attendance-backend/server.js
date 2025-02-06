@@ -33,3 +33,8 @@ app.listen(PORT, () => {
   console.log("DB_HOST:", process.env.DB_HOST);
   console.log("leaveRoutes:", leaveRoutes);
 });
+
+app.listen(5000, '0.0.0.0', () => {
+  console.log('Server running on http://10.10.2.76:5000');
+});
+
