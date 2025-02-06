@@ -13,7 +13,7 @@ function CreateUser() {
     setLoading(true);
     try {
       // Make an API call to the backend to create a new user
-      const response = await axios.post("http://localhost:5000/api/users", values);
+      const response = await axios.post("http://localhost:5000/api/users/add", values);
 
       // Show success notification
       notification.success({

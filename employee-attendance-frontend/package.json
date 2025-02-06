@@ -11,14 +11,18 @@
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "employee-attendance-frontend": "file:",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "react": "18",
     "react-dom": "18",
     "react-router-dom": "^7.1.3",
     "react-scripts": "5",
     "react-spinners": "^0.15.0",
     "react-toastify": "^11.0.3",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

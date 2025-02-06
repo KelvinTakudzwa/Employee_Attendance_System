@@ -12,7 +12,7 @@ function UpdateUser() {
     setLoading(true);
     try {
       // Make API call to update user information
-      const response = await axios.put("http://localhost:5000/api/users", values);
+      const response = await axios.put("http://localhost:5000/api/users/update", values);
 
       notification.success({
         message: "User Updated",

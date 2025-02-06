@@ -1,6 +1,6 @@
 .dashboard-container {
   padding: 20px;
-  background: #d0e3ff;
+  background: #b7b7a4;
   min-height: 100vh;
 }
 
@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #7096d1;
+  background: #5e6c58;
   padding: 15px 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
@@ -18,10 +18,11 @@
 .nav-buttons {
   display: flex;
   gap: 10px;
+  color: white;
 }
 
 .content-container {
-  background: #7096d1;
+  background: #5e6c58;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
