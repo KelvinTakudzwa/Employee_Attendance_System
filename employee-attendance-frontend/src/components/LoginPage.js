@@ -63,7 +63,7 @@ function LoginPage() {
           </Button>
         </form>
 
-        <Text type="secondary">Forgot password? <a href="#">Reset here</a></Text>
+        <Text type="secondary">Forgot password? <a href="/forgot-password">Reset here</a></Text>
       </Card>
     </div>
   );
