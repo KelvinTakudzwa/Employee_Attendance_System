@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
 const attendanceRoutes = require('./routes/attendanceRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 
 const app = express();
@@ -25,6 +26,8 @@ app.use('/api/attendance', attendanceRoutes);
 app.use('/api/login', loginRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/leave', leaveRoutes);
+app.use('/api', authRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
