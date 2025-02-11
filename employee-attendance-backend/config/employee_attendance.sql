@@ -1,6 +1,3 @@
--- Create the database
-CREATE DATABASE employee_attendance;
-
 -- Use the database
 USE employee_attendance;
 
