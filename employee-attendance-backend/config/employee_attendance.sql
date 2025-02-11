@@ -4,22 +4,11 @@ CREATE DATABASE employee_attendance;
 -- Use the database
 USE employee_attendance;
 
--- Employees Table
-CREATE TABLE employees (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    position VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Attendance Logs Table
 CREATE TABLE attendance_logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT NOT NULL,
+    username varchar(255),
     login_time DATETIME,
-    logout_time DATETIME,
-    FOREIGN KEY (employee_id) REFERENCES employees(id)
+    logout_time DATETIME
 );
 
 -- Users Table
@@ -65,8 +54,4 @@ CREATE TABLE leave_requests (
     status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Drop employee_id column from attendance_logs table if it's no longer needed
-ALTER TABLE attendance_logs
-    DROP COLUMN employee_id;
 
