@@ -4,6 +4,8 @@ import { Card, Input, Button, Typography, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "../services/api";
 import "../styles/LoginPage.css"; 
+// import backgroundImage from "../assets/background2.png";
+import ParticlesBackground from "./ParticlesBackground";
 
 const { Title, Text } = Typography;
 
@@ -12,6 +14,21 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // const backgroundStyle = {
+  //   backgroundImage: `url(${backgroundImage})`,
+  //   backgroundSize: "content",
+  //   backgroundPosition: "center",
+  //   backgroundRepeat: "no-repeat",
+  //   height: "100vh",
+  //   width: "100vw",
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: "#f4f4f4",
+  //   // height: "100vh", // Ensures full screen
+  // };
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,7 +53,8 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container" /*style={backgroundStyle}*/>
+      <ParticlesBackground />
       <Card className="login-card" bordered={false}>
         <Title level={2} className="login-title">Login</Title>
 
