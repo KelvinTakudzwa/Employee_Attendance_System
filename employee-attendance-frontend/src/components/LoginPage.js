@@ -5,7 +5,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "../services/api";
 import "../styles/LoginPage.css"; 
 // import backgroundImage from "../assets/background2.png";
-import ParticlesBackground from "./ParticlesBackground";
+// import ParticlesBackground from "./ParticlesBackground";
 
 const { Title, Text } = Typography;
 
@@ -54,7 +54,7 @@ function LoginPage() {
 
   return (
     <div className="login-container" /*style={backgroundStyle}*/>
-      <ParticlesBackground />
+      {/* <ParticlesBackground /> */}
       <Card className="login-card" bordered={false}>
         <Title level={2} className="login-title">Login</Title>
 
