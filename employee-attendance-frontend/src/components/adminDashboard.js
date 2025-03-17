@@ -24,6 +24,7 @@ import axios from "../services/api";
 import CreateUser from "./CreateUser";
 import UpdateUser from "./UpdateUser";
 import "../styles/dashboard.css";
+import DeleteUser from "./DeleteUser";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -39,6 +40,7 @@ function AdminDashboard() {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [showLeaveRequests, setShowLeaveRequests] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen , setIsDeleteModalOpen] = useState(false);
 
   const username = location.state?.username || "Admin";
   const token = localStorage.getItem("token");
@@ -213,6 +215,22 @@ function AdminDashboard() {
       sorter: (a, b) => new Date(a.logout_time) - new Date(b.logout_time),
       render: (text) => (text ? text : "Still Logged In"),
     },
+    {
+      title: "Shift",
+      dataIndex: "shift",
+      key: "shift",
+      sorter: (a, b) => a.shift?.localeCompare(b.shift),
+
+    },
+    {
+      title: "Summary",
+      dataIndex: "summary",
+      key: "summary",
+      sorter: (a, b) => a.summary?.localeCompare(b.summary),
+      render: (text) => (text? text : "No Summary Provided"),
+        
+    
+    }
   ];
 
   return (
@@ -242,6 +260,7 @@ function AdminDashboard() {
           >
             Update User
           </Button>
+          <Button danger onClick={()=> setIsDeleteModalOpen(true)}>Delete User</Button>
           <Button onClick={handleLogout} danger icon={<LogoutOutlined />}>
             Logout
           </Button>
@@ -359,6 +378,7 @@ function AdminDashboard() {
           <Button onClick={closeDrawer}>Close</Button>
         </Space>
       </Drawer>
+      <DeleteUser isOpen={isDeleteModalOpen} onClose={() =>setIsDeleteModalOpen(false)}/>
     </div>
   );
 }

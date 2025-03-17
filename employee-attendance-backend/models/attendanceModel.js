@@ -1,10 +1,18 @@
 const db = require("../config/db");
 
+const getShift = (login_time) => {
+  const hours = login_time.getHours();
+  return (hours >= 8 && hours < 16.5) ? "Day Shift" : "Night Shift";
+  
+};
 // Add a new check-in entry
 const createCheckIn = async (username, login_time) => {
+
+  
   try {
-    const query = "INSERT INTO attendance_logs (username, login_time) VALUES (?, ?)";
-    const [result] = await db.query(query, [username, login_time]);
+    const shift = getShift(login_time);
+    const query = "INSERT INTO attendance_logs (username, login_time, shift) VALUES (?, ?, ?)";
+    const [result] = await db.query(query, [username, login_time, shift]);
     return result;
   } catch (error) {
     console.error("Error creating check-in:", error);
@@ -13,16 +21,16 @@ const createCheckIn = async (username, login_time) => {
 };
 
 // Update check-out time for the latest check-in
-const updateCheckOut = async (username, logout_time) => {
+const updateCheckOut = async (username, logout_time,summary) => {
   try {
     const query = `
       UPDATE attendance_logs
-      SET logout_time = ?
+      SET logout_time = ?, summary = ?
       WHERE username = ? AND logout_time IS NULL
       ORDER BY login_time DESC
       LIMIT 1
     `;
-    const [result] = await db.query(query, [logout_time, username]);
+    const [result] = await db.query(query, [logout_time, summary, username]);
     return result;
   } catch (error) {
     console.error("Error updating check-out:", error);
@@ -33,7 +41,7 @@ const updateCheckOut = async (username, logout_time) => {
 // Fetch all attendance logs
 const getAllAttendanceLogs = async () => {
   try {
-    const query = "SELECT username, login_time, logout_time FROM attendance_logs ORDER BY login_time DESC";
+    const query = "SELECT username, login_time, logout_time, shift , summary FROM attendance_logs ORDER BY login_time DESC";
     const [results] = await db.query(query);
     return results;
   } catch (error) {
@@ -46,7 +54,7 @@ const getAllAttendanceLogs = async () => {
 const getAttendanceLogsByUsername = async (username) => {
   try {
     const query = `
-      SELECT username, login_time, logout_time
+      SELECT username, login_time, logout_time, shift, summary
       FROM attendance_logs
       WHERE username = ?
       ORDER BY login_time DESC

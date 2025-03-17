@@ -78,6 +78,12 @@ const resetPassword = async (username, hashedPassword) => {
   }
 };
 
+const deleteUserByUsername = async (username) => {
+  const query = 'DELETE FROM users WHERE username = ?';
+  const [result] = await db.execute(query, [username]);
+  return result.affectedRows;
+};
 
 
-module.exports = { addUser, updateUserByUsername, generateResetToken, verifyResetToken, resetPassword };
+
+module.exports = { addUser, updateUserByUsername, generateResetToken, verifyResetToken, resetPassword, deleteUserByUsername };

@@ -15,23 +15,51 @@ const handleCheckIn = async (req, res) => {
 };
 
 // Handle user check-out
+// const handleCheckOut = async (req, res) => {
+//   try {
+//     const { username } = req.user; // Extract from token
+//     const logout_time = new Date();
+
+//     const result = await updateCheckOut(username, logout_time);
+    
+//     if (result.affectedRows === 0) {
+//       return res.status(404).json({ error: "No open check-in record found." });
+//     }
+
+//     res.status(200).json({ message: "Check-out successful!" });
+//   } catch (err) {
+//     console.error("Error during check-out:", err);
+//     res.status(500).json({ error: "Failed to check out." });
+//   }
+// };
+
 const handleCheckOut = async (req, res) => {
   try {
     const { username } = req.user; // Extract from token
+    const { summary } = req.body; // Get summary from request body
     const logout_time = new Date();
 
-    const result = await updateCheckOut(username, logout_time);
-    
+    console.log("Received Summary:", summary);
+
+
+    if (!summary || summary.trim().length === 0) {
+      return res.status(400).json({ error: "Summary is required before checkout." });
+    }
+
+    const result = await updateCheckOut(username, logout_time, summary);
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "No open check-in record found." });
     }
 
-    res.status(200).json({ message: "Check-out successful!" });
+    res.status(200).json({ message: "Check-out successful!", logout_time, summary });
   } catch (err) {
     console.error("Error during check-out:", err);
     res.status(500).json({ error: "Failed to check out." });
   }
 };
+
+
 
 // Fetch all attendance logs
 const handleGetAttendanceLogs = async (req, res) => {

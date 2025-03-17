@@ -8,11 +8,13 @@ import { Table, Button } from "antd"; // Ant Design components
 import "../styles/dashboard.css"; // Import the CSS file
 import LeaveRequestModal from "./LeaveRequestModal";
 import { useQuery } from "@tanstack/react-query";
+import  CheckOutModal  from "./CheckOutModal";
 
 function EmployeeDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCheckOutModalOpen, setIsCheckOutModalOpen] = useState(false);
   const [attendance, setAttendance] = useState([]); // State to store attendance logs
   const [loading, setLoading] = useState({
     checkIn: false,
@@ -66,27 +68,27 @@ function EmployeeDashboard() {
     }
   };
 
-  const handleCheckOut = async () => {
-    setLoading((prev) => ({ ...prev, checkOut: true })); // Start loading
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/attendance/check-out",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      notify(response.data.message);
-    } catch (error) {
-      toast.error(
-        error.response?.data?.error || "Check-out failed. Please try again."
-      );
-    } finally {
-      setLoading((prev) => ({ ...prev, checkOut: false })); // Stop loading
-    }
-  };
+  // const handleCheckOut = async () => {
+  //   setLoading((prev) => ({ ...prev, checkOut: true })); // Start loading
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5000/api/attendance/check-out",
+  //       {},
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     notify(response.data.message);
+  //   } catch (error) {
+  //     toast.error(
+  //       error.response?.data?.error || "Check-out failed. Please try again."
+  //     );
+  //   } finally {
+  //     setLoading((prev) => ({ ...prev, checkOut: false })); // Stop loading
+  //   }
+  // };
 
   const handleViewAttendance = async () => {
     if (showTable) {
@@ -133,6 +135,8 @@ function EmployeeDashboard() {
   const columns = [
     { title: "Login Time", dataIndex: "login_time", key: "login_time" },
     { title: "Logout Time", dataIndex: "logout_time", key: "logout_time" },
+    { title: "Shift", dataIndex: "shift", key: "shift" },
+    { title: "Summary", dataIndex: "summary", key: "summary" },
   ];
 
   return (
@@ -148,7 +152,7 @@ function EmployeeDashboard() {
             Check-In
           </Button>
           <Button
-            onClick={handleCheckOut}
+            onClick={()=> setIsCheckOutModalOpen(true)}
             loading={loading.checkOut}
             danger
           >
@@ -208,6 +212,7 @@ function EmployeeDashboard() {
         refetch={refetch}
         username={username}
       />
+      <CheckOutModal isOpen={isCheckOutModalOpen} closeModal={() => setIsCheckOutModalOpen(false)} token={token} notify={notify}/>
 
       {/* Leave Requests Table (Shown Only When Requested) */}
       {showLeaveTable && (
