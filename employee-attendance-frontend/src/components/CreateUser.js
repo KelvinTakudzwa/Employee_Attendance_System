@@ -79,6 +79,32 @@ function CreateUser() {
         </Form.Item>
 
         <Form.Item
+          name="national_id"
+          label="National ID"
+          rules={[{ required: true, message: "Please input the national ID!" }]}
+        >
+          <Input placeholder="Enter national ID" />
+        </Form.Item>
+
+        <Form.Item
+          name="phone_number"
+          label="Phone Number"
+          rules={[
+            { required: true, message: "Please input the phone number!" },
+          ]}
+        >
+          <Input placeholder="Enter phone number" />
+        </Form.Item>
+
+        <Form.Item
+          name="department"
+          label="Department"
+          rules={[{ required: true, message: "Please input the department!" }]}
+        >
+          <Input placeholder="Enter department" />
+        </Form.Item>
+
+        <Form.Item
           name="role"
           label="Role"
           rules={[{ required: true, message: "Please select a role!" }]}
@@ -93,10 +119,7 @@ function CreateUser() {
           <Button type="primary" htmlType="submit" loading={loading}>
             Create User
           </Button>
-          <Button
-            onClick={() => form.resetFields()}
-            type="default"
-          >
+          <Button onClick={() => form.resetFields()} type="default">
             Reset
           </Button>
         </Space>

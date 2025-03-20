@@ -47,31 +47,31 @@ function UpdateUser() {
           <Input placeholder="Enter username" />
         </Form.Item>
 
-        <Form.Item
-          name="fullname"
-          label="Full Name"
-        >
+        <Form.Item name="fullname" label="Full Name">
           <Input placeholder="Enter full name" />
         </Form.Item>
 
-        <Form.Item
-          name="email"
-          label="Email"
-        >
+        <Form.Item name="email" label="Email">
           <Input placeholder="Enter email" />
         </Form.Item>
 
-        <Form.Item
-          name="password"
-          label="Password"
-        >
+        <Form.Item name="password" label="Password">
           <Input.Password placeholder="Enter new password (if changing)" />
         </Form.Item>
 
-        <Form.Item
-          name="role"
-          label="Role"
-        >
+        <Form.Item name="national_id" label="National ID">
+          <Input placeholder="Enter National ID" />
+        </Form.Item>
+
+        <Form.Item name="phone_number" label="Phone Number">
+          <Input placeholder="Enter phone number" />
+        </Form.Item>
+
+        <Form.Item name="department" label="Department">
+          <Input placeholder="Enter department" />
+        </Form.Item>
+
+        <Form.Item name="role" label="Role">
           <Select placeholder="Select a role">
             <Option value="employee">Employee</Option>
             <Option value="admin">Admin</Option>

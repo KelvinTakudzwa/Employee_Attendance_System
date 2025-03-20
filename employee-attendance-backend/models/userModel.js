@@ -3,10 +3,10 @@ const crypto = require('crypto');
 
 
 // Add a new user
-const addUser = async (fullname, username, email, hashedPassword, role) => {
-  const query = 'INSERT INTO users (fullname, username, email, password, role) VALUES (?, ?, ?, ?, ?)';
+const addUser = async (fullname, username, email, hashedPassword, role, national_id, phone_number, department) => {
+  const query = 'INSERT INTO users (fullname, username, email, password, role, national_id, phone_number, department) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
   try {
-    const [result] = await db.query(query, [fullname, username, email, hashedPassword, role]);
+    const [result] = await db.query(query, [fullname, username, email, hashedPassword, role, national_id, phone_number, department]);
     return result.insertId;
   } catch (err) {
     throw err;

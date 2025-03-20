@@ -7,10 +7,10 @@ const {
 
 // Add a new user
 const addUserController = async (req, res) => {
-  const { fullname, username, email, password, role } = req.body;
+  const { fullname, username, email, password, role, national_id, phone_number, department } = req.body;
 
   // Basic validation for required fields
-  if (!fullname || !username || !email || !password || !role) {
+  if (!fullname || !username || !email || !password || !role || !national_id || !phone_number || !department) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -25,7 +25,10 @@ const addUserController = async (req, res) => {
       username,
       email,
       hashedPassword,
-      role
+      role,
+      national_id,
+      phone_number,
+      department
     );
 
     res.status(201).json({ message: "User added successfully", userId });
